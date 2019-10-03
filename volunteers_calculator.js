@@ -11,6 +11,7 @@ var VolunteersCalculator = module.exports = function(){
     daysCount: null,
     data: null,
     results: null,
+    resultsDescending: null,
     resultsWithDays: null,
 
     processFile: function(f, done) {
@@ -53,10 +54,19 @@ var VolunteersCalculator = module.exports = function(){
       for(var i = 0; i< volunteers.length; i++) {
         var result = (volunteers[i] +" additional volunteers are needed on day "+i)
         this.results.push(result)
+      }
+      return this.results;
+    },
+
+    getResultsDescending: function(volunteers) {
+      this.resultsDescending = [];
+      for(var i = 0; i< volunteers.length; i++) {
+        var result = (volunteers[i] +" additional volunteers are needed on day "+i)
+        this.resultsDescending.push(result)
         console.log(result)
       }
-      console.log(this.results.sort(function(a,b){return b.split('additional')[0] - a.split('additional')[0]}));
-      return this.results;
+      console.log(this.resultsDescending.sort(function(a,b){return b.split('additional')[0] - a.split('additional')[0]}));
+      return this.resultsDescending;
     },
 
     getResultsWithDays: function(volunteers) {
@@ -107,7 +117,7 @@ if (require.main === module) {
   var readAndPrint = function(arg) {
     calculator.processFile(arg, function() {
       var volunteers = calculator.getVolunteersNeeded();
-      calculator.getResults(volunteers);
+      calculator.getResultsDescending(volunteers);
       calculator.getResultsWithDays(volunteers);
     });
   }
