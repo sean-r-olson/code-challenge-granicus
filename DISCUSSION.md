@@ -28,9 +28,16 @@ Solution:
 ## Problem 4 
 
 - It seems unnecessary to declare 'self' equating to 'this', in the processFile function
-- Change var to let or const for declaring variables(ES6 standards)
+    - * after removing the declaration of 'self', and running the test, i received an error as follows: 
+    - "Comparing two different types of values. Expected number but received null."
+- Change let to let or const for declaring variables (ES6 standards)
 - Arrow functions or function functionName () syntax for writing functions 
 - daycount is an unused function
+- Re-order functions to follow README file 
+    - 1) Bags Still Needed = Goal Bags - Actual Bags
+    - 2) Bags Stocked Per Volunteer = Actual Bags / Volunteers
+    - 3) Volunteers Needed = Bags Still Needed / Bags Stocked Per Volunteer
 - Code comments
-- For the client, include a command to run in the terminal to run food_shelf_south.txt (node volunteers_calculator.js food_shelf_south.txt)
-- Provide a whole number for the calculation of volunteers needed - possibly by using the 'toFixed' method 
+- For the client, include a command in the README file to run in the terminal to run food_shelf_south.txt (node volunteers_calculator.js food_shelf_south.txt)
+- Provide a whole number for the calculation of volunteers needed - no decimal points, instead of 2 - passing '0' into the 'toFixed' method in the getVolunteersNeeded function, instead of '2'
+    - in this case, you would need to change the 'testVolunteersNeeded' unit test to expecting whole numbers 
