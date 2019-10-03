@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var fs = require("fs");
+let fs = require("fs");
 
-var VolunteersCalculator = module.exports = function(){
+let VolunteersCalculator = module.exports = function(){
 
   return {
     bagsStillNeeded: null,
@@ -15,15 +15,15 @@ var VolunteersCalculator = module.exports = function(){
     resultsWithDays: null,
 
     processFile: function(f, done) {
-      var self = this;
+      let self = this;
       fs.readFile(f, 'utf8', function (err,data) {
-        var lines = data.split('\n');
+        let lines = data.split('\n');
         this.volunteerData = [];
-        for(var line = 0; line < lines.length; line++){
+        for(let line = 0; line < lines.length; line++){
           this.volunteerData.push(lines[line].split(','));
         }
-        var daysCount = (this.volunteerData.length-1);
-        var data = this.volunteerData.splice(1);
+        let daysCount = (this.volunteerData.length-1);
+        data = this.volunteerData.splice(1);
 
         self.daysCount = daysCount;
         self.data = data;
@@ -31,37 +31,23 @@ var VolunteersCalculator = module.exports = function(){
       });
     },
 
-    dayCount: function() {
-      var dayCount = this.data.length;
-      return this.dayCount;
-    },
-
-    getVolunteersNeeded: function() {
-      if (this.volunteersNeeded !== null) {
-        return this.volunteersNeeded;
-      }
-
-      var volunteersNeeded = [];
-      for(var j = 0; j < this.daysCount; j++) {
-        var v = (this.getBagsStillNeeded()[j]/this.getBagsStockedPerVolunteer()[j])
-        volunteersNeeded.push(v.toFixed(2));
-      };
-      return volunteersNeeded;
-    },
-
+    // determine number of additional volunteers needed/day
+    // IN ORDER OF DAY OF THE WEEK
     getResults: function(volunteers) {
       this.results = [];
-      for(var i = 0; i< volunteers.length; i++) {
-        var result = (volunteers[i] +" additional volunteers are needed on day "+i)
+      for(let i = 0; i< volunteers.length; i++) {
+        let result = (volunteers[i] +" additional volunteers are needed on day "+i)
         this.results.push(result)
       }
       return this.results;
     },
 
+    // determine number of additional volunteers needed/day 
+    // WITHOUT DAY OF THE WEEK - IN DESCENDING ORDER BASED ON # OF ADD. VOLUNTEERS NEEDED
     getResultsDescending: function(volunteers) {
       this.resultsDescending = [];
-      for(var i = 0; i< volunteers.length; i++) {
-        var result = (volunteers[i] +" additional volunteers are needed on day "+i)
+      for(let i = 0; i< volunteers.length; i++) {
+        let result = (volunteers[i] +" additional volunteers are needed on day "+i)
         this.resultsDescending.push(result)
         console.log(result)
       }
@@ -69,11 +55,13 @@ var VolunteersCalculator = module.exports = function(){
       return this.resultsDescending;
     },
 
+    // determine number of additional volunteers needed/day 
+    // WITH DAY OF WEEK - IN DESCENDING ORDER BASED ON # OF ADD. VOLUNTEERS NEEDED
     getResultsWithDays: function(volunteers) {
       this.resultsWithDays = [];
-      var daysOfTheWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-      for(var i = 0; i< volunteers.length; i++) {
-        var result = (volunteers[i]+" additional volunteers are needed on "+ daysOfTheWeek[i])
+      let daysOfTheWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      for(let i = 0; i< volunteers.length; i++) {
+        let result = (volunteers[i]+" additional volunteers are needed on "+ daysOfTheWeek[i])
         this.resultsWithDays.push(result)
         console.log(result)
       }
@@ -82,41 +70,57 @@ var VolunteersCalculator = module.exports = function(){
       return this.resultsWithDays;
     },
 
+    // determine bags still needed (Bags Still Needed = Goal Bags - Actual Bags)
     getBagsStillNeeded: function() {
       if (this.bagsStillNeeded !== null) {
         return this.bagsStillNeeded;
       }
 
       this.bagsStillNeeded = [];
-      for(var i = 0; i < this.daysCount; i++) {
-        var goalBags = (this.data[i][1]);
-        var actualBags = (this.data[i][2]);
+      for(let i = 0; i < this.daysCount; i++) {
+        let goalBags = (this.data[i][1]);
+        let actualBags = (this.data[i][2]);
         this.bagsStillNeeded.push(goalBags - actualBags);
       };
       return this.bagsStillNeeded;
     },
 
+    // determine bags stocked per volunteer (Bags Stocked Per Volunteer = Actual Bags / Volunteers)
     getBagsStockedPerVolunteer: function() {
       if (this.bagsStockedPerVolunteer !== null) {
         return this.bagsStockedPerVolunteer;
       }
 
       this.bagsStockedPerVolunteer = [];
-      for(var i = 0; i < this.daysCount; i++) {
-        var bagsStocked = this.data[i][2];
-        var volunteers = this.data[i][0];
+      for(let i = 0; i < this.daysCount; i++) {
+        let bagsStocked = this.data[i][2];
+        let volunteers = this.data[i][0];
         this.bagsStockedPerVolunteer.push((bagsStocked/volunteers));
       };
       return this.bagsStockedPerVolunteer;
-    }
+    },
+    
+    // determine total volunteers needed/day (Volunteers Needed = Bags Still Needed / Bags Stocked Per Volunteer)
+    getVolunteersNeeded: function() {
+      if (this.volunteersNeeded !== null) {
+        return this.volunteersNeeded;
+      }
+
+      let volunteersNeeded = [];
+      for(let j = 0; j < this.daysCount; j++) {
+        let v = (this.getBagsStillNeeded()[j]/this.getBagsStockedPerVolunteer()[j])
+        volunteersNeeded.push(v.toFixed(0));
+      };
+      return volunteersNeeded;
+    },
   }
 }
 
 if (require.main === module) {
-  var calculator = new VolunteersCalculator();
-  var readAndPrint = function(arg) {
+  let calculator = new VolunteersCalculator();
+  let readAndPrint = function(arg) {
     calculator.processFile(arg, function() {
-      var volunteers = calculator.getVolunteersNeeded();
+      let volunteers = calculator.getVolunteersNeeded();
       calculator.getResultsDescending(volunteers);
       calculator.getResultsWithDays(volunteers);
     });

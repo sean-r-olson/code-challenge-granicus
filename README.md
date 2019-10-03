@@ -74,11 +74,22 @@ or
 
 ## Running the Program
 
+- FOR FOOD SHELF NORTH: 
+
     node volunteers_calculator.js food_shelf_north.txt
 
 or     
     
     docker run -it --rm -v ${PWD}:/usr/src/app -w /usr/src/app node:10-alpine node volunteers_calculator.js food_shelf_north.txt
+
+- FOR FOOD SHELF SOUTH: 
+
+    node volunteers_calculator.js food_shelf_south.txt
+
+or     
+    
+    docker run -it --rm -v ${PWD}:/usr/src/app -w /usr/src/app node:10-alpine node volunteers_calculator.js food_shelf_south.txt
+
 
 ## Running the Tests
 
