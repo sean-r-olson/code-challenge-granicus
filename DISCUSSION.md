@@ -26,10 +26,11 @@ Solution:
 - I then did some more research, and found an example in stackoverflow of someone sorting through an array containing integers as well as other characters. In the most highly ranked answer, the example used the sort method as well as the split method, to run through each string, and once a certain character in each string was reached, the split method would extract the values that existed in the string up until that designated character. I then tried using this method to compare each string up until 'additional' (each string started with the number I was trying to access/compare with other numbers in the other strings). This method ended up working. 
 
 ## Problem 4 
-- self? --> seems unnecesarry to declare 'self' as a variable equating to 'this'.. easier to read code with just 'this'
-- change var to let (ES6 standards)
-- arrow functions/different function syntax 
+
+- It seems unnecessary to declare 'self' equating to 'this', in the processFile function
+- Change var to let or const for declaring variables(ES6 standards)
+- Arrow functions or function functionName () syntax for writing functions 
 - daycount is an unused function
-- comments 
-- is only capable of running food_shelf_north.txt as of now 
-- provide a whole number for the food shelfs - no decimal point - by using the toFixed or subString method
+- Code comments
+- For the client, include a command to run in the terminal to run food_shelf_south.txt (node volunteers_calculator.js food_shelf_south.txt)
+- Provide a whole number for the calculation of volunteers needed - possibly by using the 'toFixed' method 
